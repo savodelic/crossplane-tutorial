@@ -72,13 +72,16 @@ gum spin --spinner dot \
 kubectl wait --for=condition=healthy provider.pkg.crossplane.io \
     --all --timeout=1800s
 
-echo "## Which Hyperscaler do you want to use?" | gum format
+#echo "## Which Hyperscaler do you want to use?" | gum format
 
-HYPERSCALER=$(gum choose "google" "aws" "azure")
+#HYPERSCALER=$(gum choose "google" "aws" "azure")
+HYPERSCALER="aws"
+echo "Hyperscaler used: "
+echo $HYPERSCALER
 
 echo "export HYPERSCALER=$HYPERSCALER" >> .env
 
-if [[ "$HYPERSCALER" == "google" ]]; then
+if [ "$HYPERSCALER" = "google" ]; then
 
     gcloud auth login
 
@@ -136,7 +139,7 @@ spec:
       name: gcp-creds
       key: creds" | kubectl apply --filename -
 
-elif [[ "$HYPERSCALER" == "aws" ]]; then
+elif [ "$HYPERSCALER" = "aws" ]; then
 
     AWS_ACCESS_KEY_ID=$(gum input --placeholder "AWS Access Key ID" --value "$AWS_ACCESS_KEY_ID")
     echo "export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> .env
